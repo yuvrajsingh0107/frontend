@@ -4,7 +4,7 @@ import {motion} from 'framer-motion';
 function VideoCard({video , _id}) {
 
   const onClick = (e) => {
-    // console.log(_id);
+    window.location.href = `/watch/${video._id}`;
   }
   return (
     <div className='cursor-pointer'>
