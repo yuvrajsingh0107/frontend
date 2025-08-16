@@ -39,7 +39,7 @@ export const getSubscribedChannels = () => API.get(`/subscribe/getSubscribedChan
 
 // like requests
 
-export const toggelLikeVideo = (videoId) => API.post(`/toggelLike/v/${videoId}`,{ withCredentials: true });
+export const toggelLikeVideo = (videoId) => API.post(`/toggelLike/v/${videoId}`,{},{ withCredentials: true });
 export const toggelLikeComment = (commentId) => API.post(`/toggelLike/c/${commentId}`,{ withCredentials: true });
 
 

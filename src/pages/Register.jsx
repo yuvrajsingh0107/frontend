@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 // import axios from "axios";
 import ThemeContext from "../context/TheamContect";
 import { register } from "../utils/api";
+import { div } from "framer-motion/client";
 
 export default function Register() {
 
@@ -16,6 +17,7 @@ export default function Register() {
   
   const {theme, setTheme} = useContext(ThemeContext);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -40,6 +42,7 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError("");
 
     const formData = new FormData();
@@ -67,6 +70,8 @@ export default function Register() {
   };
 
   return (
+    <>
+    
     <div className={theme === "dark" ? "dark" : ""}>
       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
         <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-md">
@@ -87,6 +92,12 @@ export default function Register() {
           {error && (
             <div className="mb-4 text-red-500 text-sm">{error}</div>
           )}
+          {
+            loading && (
+            <div className="mb-4 text-white text-sm">processing.....</div>
+
+            )
+          }
 
           <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
             <input
@@ -146,6 +157,7 @@ export default function Register() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
