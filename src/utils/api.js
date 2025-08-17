@@ -5,7 +5,7 @@ import axios from "axios";
 //   withCredentials: true, // for cookies
 // });
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL1 || "http://localhost:5000/api/v1",
+  baseURL: import.meta.env.VITE_API_URL2 || "http://localhost:5000/api/v1",
   withCredentials: true, // for cookies
 });
 
