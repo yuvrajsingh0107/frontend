@@ -43,8 +43,8 @@ export default function Watch() {
     // console.log(newComment)
     const data = {
       content: newComment,
-      videoId: video._id,
-      userId: user._id
+      videoId: video?._id || "",
+      userId: user?._id || ""
     }
     setNewComment("");
     // console.log(data)
