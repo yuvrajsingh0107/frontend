@@ -30,7 +30,8 @@ export default function Login() {
         setLoading(true);
         const res = await login(inputUser);
   
-        console.log(res);
+        console.log("login response : ", res );
+        console.log("login response cookies : ", res.cookies );
         const logedInUser = res.data.data.logedInUser;
         console.log("logedInUSer : ", logedInUser);
   
