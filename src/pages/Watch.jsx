@@ -1,39 +1,97 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { addComment, fetchVideoById, toggelLikeVideo } from "../utils/api"; // Axios instance
+import { addComment, fetchVideoById, getComments, toggelLikeVideo } from "../utils/api"; // Axios instance
+import { AuthContext } from "../context/AuthContext";
 // import CommentSection from "../components/CommentSection"; // Make later
 
 export default function Watch() {
+
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [likes, setLikes] = useState(0);
+  const [commentPage, setCommentsPage] = useState(1);
 
   useEffect(() => {
     fetchVideoById(id)
       .then(res => {
         setVideo(res.data);
-        setComments(res.data.comments || []);
+        // setComments(res.data.comments || []);
+        setLikes((res.data.likes || 0));
         console.log("res.data", res.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-
+      getComments(id,commentPage)
+      .then(res => {
+        setComments(res.data.data);
+        console.log("comments : ", res.data);
+      })
+      .catch(err => console.log(err));
   }, [id]);
 
-  function handleSubmit(e) {
+  // useEffect(() => {}, [likes])
+
+  async function handleSubmit(e) {
     // Handle comment submission
     e.preventDefault()
-    
+
+    // console.log(newComment)
+    const data = {
+      content: newComment,
+      videoId: video._id,
+      userId: user._id
+    }
+    setNewComment("");
+    // console.log(data)
+    const res = await addComment(data);
+    if (res.status !== 201) {
+      throw new Error("Failed to add comment");
+    }
+    const updatedComments = await getComments(id, 1);
+    setComments(updatedComments.data.data);
+    setCommentsPage(1)
+    console.log("comments : ", updatedComments)
+
+    // setComments(updatedComments);
+
+
+    console.log(res);
   }
 
-  function toggleLike(e){
+  async function toggleLike(e) {
     console.log("toggleLike called");
-    toggelLikeVideo(video._id);
+    const res = await toggelLikeVideo(video._id);
+    console.log("like res ", typeof (res.data))
+    console.log("like res ", res.data)
+    if (res.data.data.like) {
+      setLikes((prev) => prev + 1)
+    } else {
+      console.log("in else :", res.data.like)
+      setLikes((prev) => prev - 1)
+    }
+    console.log("like toggled");
+    // setLikes();
   }
-  console.log("video : ", video);
+  // console.log("video : ", video);
+
+
+  const loadMoreComments = async () => {
+    const res = await getComments(id, commentPage + 1);
+    setComments((prev) => [...prev, ...res.data.data]);
+    setCommentsPage((prev) => prev + 1);
+  }
+
+
+
+
+
+
+
 
   if (loading) {
     return <p className="text-center bg-gray-900 mt-10 text-lg">Loading video...</p>;
@@ -73,11 +131,11 @@ export default function Watch() {
             <p>
               {video.views} views • {new Date(video.createdAt).toLocaleDateString()}
             </p>
-            <button 
+            <button
               onClick={() => toggleLike()}
               className="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition"
             >
-              👍 {video.likes} 
+              👍 {likes}
             </button>
           </div>
           <div className="w-full h-px bg-amber-50 mt-10"></div>
@@ -113,12 +171,25 @@ export default function Watch() {
                 {comments.map((comment) => (
                   <div
                     key={comment._id}
-                    className="p-3 bg-gray-100 rounded-lg"
+                    className="p-3 bg-gray-700 rounded-lg"
                   >
-                    <p className="text-sm font-semibold">{comment.user?.username || "User"}</p>
-                    <p>{comment.content}</p>
+                    <div className="flex items-center gap-6">
+                      <img src={comment.owner.avatar} className="w-7 h-7 rounded-full" alt="" />
+                      <div>
+                        <p>{comment.content}</p>
+                        <p className="text-sm text-gray-400 font-bold">{comment.owner?.userName || "User"}</p>
+                      </div>
+
+                    </div>
+
                   </div>
                 ))}
+              </div>
+
+              <div>
+                <button onClick={loadMoreComments}>
+                  Load More
+                </button>
               </div>
             </div>
           </div>
