@@ -1,12 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { addComment, fetchVideoById, getComments, toggelLikeVideo } from "../utils/api"; // Axios instance
+import { addComment, fetchVideoById, getComments, toggleLikeVideo } from "../utils/api"; // Axios instance
 import { AuthContext } from "../context/AuthContext";
 // import CommentSection from "../components/CommentSection"; // Make later
 
 export default function Watch() {
-
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const [video, setVideo] = useState(null);
@@ -65,7 +64,14 @@ export default function Watch() {
 
   async function toggleLike(e) {
     console.log("toggleLike called");
-    const res = await toggelLikeVideo(video._id);
+
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const token = storedUser?.accessToken;
+    // console.log("token : ",token)
+
+    console.log("User from localStorage:", storedUser);
+
+    const res = await toggleLikeVideo(video._id,token);
     console.log("like res ", typeof (res.data))
     console.log("like res ", res.data)
     if (res.data.data.like) {

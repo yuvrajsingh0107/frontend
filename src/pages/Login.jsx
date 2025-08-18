@@ -29,10 +29,16 @@ export default function Login() {
         console.log("in try block")
         setLoading(true);
         const res = await login(inputUser);
-  
-        console.log("login response : ", res );
-        console.log("login response cookies : ", res.cookies );
+
+        const accessToken = res.data.data.accessToken;
+        const refreshToken = res.data.data.refreshToken;
         const logedInUser = res.data.data.logedInUser;
+        
+        logedInUser.accessToken = accessToken;
+        logedInUser.refreshToken = refreshToken;
+
+        // console.log("login response : ", res );
+        // console.log("login response cookies : ", res.cookies );
         console.log("logedInUSer : ", logedInUser);
   
         setUser(logedInUser);
