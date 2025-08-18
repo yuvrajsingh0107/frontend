@@ -15,8 +15,10 @@ const authHeaders = (token) => ({
 // ====================== Auth ======================
 export const login = (data) => API.post("/users/login", data, { withCredentials: true });
 export const register = (data) => API.post("/users/regiseter", data, { withCredentials: true });
-export const getProfile = (token) => API.get("/users/getUser", { headers: authHeaders(token) }).then(res => res.data);
 export const logout = (token) => API.post("/users/logout", {}, { headers: authHeaders(token) });
+
+
+export const getProfile = (token) => API.get("/users/getUser", { headers: authHeaders(token) }).then(res => res.data);
 export const refreshToken = (token) => API.patch("/users/refresh-token", {}, { headers: authHeaders(token) });
 export const updateAvatar = (data, token) => API.patch("/users/updateAvatar", data, { headers: authHeaders(token) });
 export const updateCoverImage = (data, token) => API.patch("/users/updateCoverImage", data, { headers: authHeaders(token) });
@@ -26,11 +28,12 @@ export const getUserChannel = (userName, token) => API.get(`/users/channel/${use
 export const getUserWatchHistory = (token) => API.get(`/users/history`, { headers: authHeaders(token) });
 
 // ====================== Video ======================
-export const uploadVideo = (data, token) => API.post(`/videos/uploadVideo`, data, { headers: authHeaders(token) });
 export const fetchVideoById = (id) => API.get(`/videos/getVideo/${id}`).then(res => res.data);
+export const fetchVideosFeed = (page) => API.get(`/videos/feed`, { params: { page } }).then(res => res.data);
+
+export const uploadVideo = (data, token) => API.post(`/videos/uploadVideo`, data, { headers: authHeaders(token) });
 export const deleteVideo = (id, token) => API.delete(`/videos/deleteVideo/${id}`, { headers: authHeaders(token) });
 export const fetchSearchResults = (params) => API.get(`/videos/getVideos`, { params }).then(res => res.data);
-export const fetchVideosFeed = (page) => API.get(`/videos/feed`, { params: { page } }).then(res => res.data);
 
 // ====================== Subscribe ======================
 export const toggleSubscribe = (channelId, token) => API.post(`/subscribe/${channelId}`, {}, { headers: authHeaders(token) });
@@ -38,24 +41,17 @@ export const getSubscribers = (token) => API.get(`/subscribe/getSubscribers`, { 
 export const getSubscribedChannels = (token) => API.get(`/subscribe/getSubscribedChannels`, { headers: authHeaders(token) });
 
 // ====================== Like ======================
-export const toggleLikeVideo = (videoId, token) =>
-  API.post(`/toggelLike/v/${videoId}`, {}, { headers: authHeaders(token) });
+export const toggleLikeVideo = (videoId, token) =>  API.post(`/toggelLike/v/${videoId}`, {}, { headers: authHeaders(token) });
 
-export const toggleLikeComment = (commentId, token) =>
-  API.post(`/toggelLike/c/${commentId}`, {}, { headers: authHeaders(token) });
+export const toggleLikeComment = (commentId, token) =>  API.post(`/toggelLike/c/${commentId}`, {}, { headers: authHeaders(token) });
 
 // ====================== Comment ======================
-export const getComments = (videoId, page, token) => 
-  API.get(`/comment/getAllComments/${videoId}/${page}`, { headers: authHeaders(token) });
+export const getComments = (videoId, page, token) =>   API.get(`/comment/getAllComments/${videoId}/${page}`, { headers: authHeaders(token) });
+export const addComment = (data, token) =>   API.post(`/comment/addComment`, data, { headers: authHeaders(token) });
 
-export const addComment = (data, token) => 
-  API.post(`/comment/addComment`, data, { headers: authHeaders(token) });
 
-export const deleteComment = (commentId, token) => 
-  API.delete(`/comment/deleteComment/${commentId}`, { headers: authHeaders(token) });
-
-export const updateComment = (commentId, data, token) => 
-  API.put(`/comment/update/${commentId}`, data, { headers: authHeaders(token) });
+export const deleteComment = (commentId, token) =>   API.delete(`/comment/deleteComment/${commentId}`, { headers: authHeaders(token) });
+export const updateComment = (commentId, data, token) =>   API.put(`/comment/update/${commentId}`, data, { headers: authHeaders(token) });
 
 
 

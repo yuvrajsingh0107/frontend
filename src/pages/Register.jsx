@@ -1,6 +1,8 @@
 import { useContext, useState } from "react";
 // import axios from "axios";
 import ThemeContext from "../context/TheamContect";
+import { Link, useNavigate } from "react-router-dom";
+
 import { register } from "../utils/api";
 import { div } from "framer-motion/client";
 
@@ -154,6 +156,9 @@ export default function Register() {
               Register
             </button>
           </form>
+          <Link to='/login' className="text-blue-600 hover:underline">
+            Already have an account? Login here
+          </Link>
         </div>
       </div>
     </div>

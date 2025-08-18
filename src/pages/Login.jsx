@@ -5,6 +5,8 @@ import { login } from "../utils/api";
 import ErrorMessage from "../components/ErrorMessage";
 import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "../context/TheamContect";
+import { Link } from "react-router-dom";
+
 
 
 
@@ -147,6 +149,9 @@ export default function Login() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+        <Link to="/register" className="text-blue-600 hover:underline">
+          New user? Register here
+        </Link>
       </div>
     </div>
   );
