@@ -35,10 +35,11 @@ export default function Watch() {
 
   // useEffect(() => {}, [likes])
 
-  async function handleSubmit(e) {
+  async function handleCommentSubmit(e) {
     // Handle comment submission
     e.preventDefault()
-
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const token = storedUser?.accessToken;
     // console.log(newComment)
     const data = {
       content: newComment,
@@ -47,7 +48,7 @@ export default function Watch() {
     }
     setNewComment("");
     // console.log(data)
-    const res = await addComment(data);
+    const res = await addComment(data,token);
     if (res.status !== 201) {
       throw new Error("Failed to add comment");
     }
@@ -155,7 +156,7 @@ export default function Watch() {
               </h2>
 
               {/* Comment Form */}
-              <form onSubmit={(e) => handleSubmit(e)} className="mb-4 flex gap-2">
+              <form onSubmit={(e) => handleCommentSubmit(e)} className="mb-4 flex gap-2">
                 <input
                   type="text"
                   placeholder="Add a comment..."
