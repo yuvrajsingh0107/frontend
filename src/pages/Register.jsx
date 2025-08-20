@@ -4,9 +4,10 @@ import ThemeContext from "../context/TheamContect";
 import { Link, useNavigate } from "react-router-dom";
 
 import { register } from "../utils/api";
-import { div } from "framer-motion/client";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Register() {
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     fullName: "",
@@ -16,7 +17,7 @@ export default function Register() {
     avatar: null,
     coverImage: null
   });
-  
+  const {setUser} = useContext(AuthContext);
   const {theme, setTheme} = useContext(ThemeContext);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false)
@@ -63,11 +64,39 @@ export default function Register() {
       // console.log(e.target.files)
       const res = await register(formData);
       console.log("rigesterd user  : ", res)
+       if(res.status === 201){
+        const accessToken = res.data.data.accessToken;
+        const refreshToken = res.data.data.refreshToken;
+        const logedInUser = res.data.data.createdUser;
+        
+        logedInUser.accessToken = accessToken;
+        logedInUser.refreshToken = refreshToken;
+
+        // console.log("login response : ", res );
+        // console.log("login response cookies : ", res.cookies );
+        console.log("logedInUSer : ", logedInUser);
+        if(logedInUser){
+          localStorage.setItem("user", JSON.stringify(logedInUser)); // Optional if you store in cookies
+          // setUser();
+          setUser(logedInUser);
+          setForm({
+            fullName: "",
+            userName: "",
+            email: "",
+            password: "",
+            avatar: null,
+            coverImage: null
+          });
+          navigate("/");
+        }
+      }
   
     } catch (err) {
       if (err.response && err.response.data) {
         setError(err.response.data.message || "Something went wrong");
       }
+    } finally{
+      setLoading(false);
     }
   };
 

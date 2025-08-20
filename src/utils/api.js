@@ -33,7 +33,7 @@ export const fetchVideosFeed = (page) => API.get(`/videos/feed`, { params: { pag
 
 export const uploadVideo = (data, token) => API.post(`/videos/uploadVideo`, data, { headers: authHeaders(token) });
 export const deleteVideo = (id, token) => API.delete(`/videos/deleteVideo/${id}`, { headers: authHeaders(token) });
-export const fetchSearchResults = (params) => API.get(`/videos/getVideos`, { params }).then(res => res.data);
+export const fetchSearchResults = (searchQuery) => API.get(`/videos/search`, { params: {search : searchQuery} }).then(res => res.data.data);
 
 // ====================== Subscribe ======================
 export const toggleSubscribe = (channelId, token) => API.post(`/subscribe/${channelId}`, {}, { headers: authHeaders(token) });

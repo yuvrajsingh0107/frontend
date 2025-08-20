@@ -1,10 +1,7 @@
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { login } from "../utils/api";
-import ErrorMessage from "../components/ErrorMessage";
 import { useNavigate } from "react-router-dom";
-import { ThemeProvider } from "../context/TheamContect";
 import { Link } from "react-router-dom";
 
 
@@ -13,7 +10,7 @@ import { Link } from "react-router-dom";
 export default function Login() {
 
   const navigate = useNavigate();
-  const { user, setUser } = useContext(AuthContext);
+  const {  setUser } = useContext(AuthContext);
   // const {theme} = useContext(ThemeProvider)
 
   const [form, setForm] = useState({ email: "", password: "" });
@@ -43,13 +40,14 @@ export default function Login() {
         // console.log("login response cookies : ", res.cookies );
         console.log("logedInUSer : ", logedInUser);
   
+        
         setUser(logedInUser);
-  
         if(logedInUser){
           
-      // if (res.data?.token) {
-        localStorage.setItem("user", JSON.stringify(logedInUser)); // Optional if you store in cookies
-      // }
+          // if (res.data?.token) {
+            localStorage.setItem("user", JSON.stringify(logedInUser)); // Optional if you store in cookies
+            // }
+            // setUser();
           console.log("redirection to / ");
           navigate('/')
         } else{
@@ -81,7 +79,7 @@ export default function Login() {
     try {
       console.log(form);
       const inputUser = {
-        email: form.emailOrUsername.includes("@")? form.emailOrUsername : null,
+        email: (form.emailOrUsername.includes("@")&& form.emailOrUsername.endsWith(".com"))? form.emailOrUsername : null,
         userName: form.emailOrUsername.includes("@")? null : form.emailOrUsername ,
         password: form.password
       }

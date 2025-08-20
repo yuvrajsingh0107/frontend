@@ -1,20 +1,20 @@
 import { useContext, useRef } from 'react'
-import { fetchVideosFeed } from '../utils/api.js';
+import { fetchSearchResults, fetchVideosFeed } from '../utils/api.js';
 import { useState, useEffect } from 'react';
 import VideoCard from '../components/VideoCard.jsx';
 import { AuthContext } from '../context/AuthContext.jsx';
-
+import {SearchContext} from '../context/SearchContext.jsx';
 
 function Home() {
   
   const {user, setUser} = useContext(AuthContext)
+  const { searchQuery} = useContext(SearchContext);
 
-  
+
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHaseMoer] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
   const loaderRef = useRef()
 
   useEffect(() => {
@@ -27,6 +27,15 @@ function Home() {
     };
     fetchData();
   }, []);
+
+  useEffect( () => {
+    ;(async () => {
+      const res = await fetchSearchResults(searchQuery);
+      setVideos(res);
+    })()
+  }, [searchQuery])
+
+
 
 
 async function fetchData(){
