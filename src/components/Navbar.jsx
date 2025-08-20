@@ -9,6 +9,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const cardRef = useRef(null);
   const {setSearchQuery} = useContext(SearchContext)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -26,13 +27,14 @@ export default function Navbar() {
 
   const { user, setUser } = useContext(AuthContext);
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (!search.trim()) return;
     // navigate(`/search?q=${encodeURIComponent(search)}`);
     setSearchQuery(search.trim());
+    navigate("/");
+
   };
 
   return (
