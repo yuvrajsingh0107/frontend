@@ -1,149 +1,107 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
+import { appendErrors } from 'react-hook-form';
+import { uploadVideo } from '../utils/api';
 
-export default function VideoUploadPage() {
-  const [videoFile, setVideoFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [progress, setProgress] = useState(0);
-  const [uploading, setUploading] = useState(false);
+function UplodeVideo() {
+  const [form, setForm] = useState({
+    video: null,
+    thumbnail: null,
+    title: "",
+    description: ""
+  })
 
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setVideoFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      setVideoFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleUpload = async () => {
-    if (!videoFile) return alert("Please select a video first!");
-
-    const formData = new FormData();
-    formData.append("video", videoFile);
-    formData.append("title", title);
-    formData.append("description", description);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:5000/api/videos/upload", true);
-    xhr.withCredentials = true; // for cookies if cross-domain
-
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const percent = Math.round((event.loaded / event.total) * 100);
-        setProgress(percent);
-      }
+  const handleChange = (e)=>{
+    const {name , value, files} = e.target;
+    
+    setForm( (prev) => {
+     const updatedForm = {
+      ...prev,
+      [name]: files && files.length > 0 ? files[0] : value,
     };
+    return updatedForm
+  })
 
-    xhr.onload = () => {
-      setUploading(false);
-      if (xhr.status === 200) {
-        alert("Video uploaded successfully!");
-        setVideoFile(null);
-        setPreviewUrl(null);
-        setTitle("");
-        setDescription("");
-        setProgress(0);
-      } else {
-        alert("Upload failed: " + xhr.responseText);
-      }
-    };
 
-    setUploading(true);
-    xhr.send(formData);
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-800 flex flex-col items-center py-10 px-4">
-      <div
-        className="w-full max-w-2xl bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-      >
-        <h1 className="text-2xl font-bold mb-4">Upload Video</h1>
-
-        {/* Drag & Drop Area */}
-        <div
-          className="border-2 border-dashed border-gray-400  rounded-lg h-40 flex items-center justify-center cursor-pointer hover:bg-gray-50"
-          onClick={() => document.getElementById("fileInput").click()}
-        >
-          {videoFile ? (
-            <p className="text-green-600 font-medium">{videoFile.name}</p>
-          ) : (
-            <p className="text-gray-500">Drag & drop a video here or click to select</p>
-          )}
-          <input
-            type="file"
-            id="fileInput"
-            accept="video/*"
-            className="hidden"
-            onChange={handleFileSelect}
-          />
-        </div>
-
-        {/* Video Preview */}
-        {previewUrl && (
-          <video
-            src={previewUrl}
-            controls
-            className="w-full mt-4 rounded-lg"
-          />
-        )}
-
-        {/* Title & Description */}
-        <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700">Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 mt-1"
-            placeholder="Enter video title"
-          />
-        </div>
-        <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700">Description</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 mt-1"
-            rows="3"
-            placeholder="Enter video description"
-          />
-        </div>
-
-        {/* Progress Bar */}
-        {uploading && (
-          <div className="w-full bg-gray-200 rounded-full h-2.5 mt-4">
-            <div
-              className="bg-blue-600 h-2.5 rounded-full transition-all"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-        )}
-
-        {/* Upload Button */}
-        <button
-          onClick={handleUpload}
-          disabled={uploading}
-          className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
-        >
-          {uploading ? `Uploading... ${progress}%` : "Upload"}
-        </button>
-      </div>
-    </div>
-  );
 }
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    formData.append("title", form.title)
+    formData.append("description", form.description)
+    formData.append("video", form.video)
+    formData.append("thumbnail", form.thumbnail)
+    const data = localStorage.getItem("user");
+    const user = JSON.parse(data);
+    if(!user){
+       alert("You must be logged in to upload a video");
+    }
+    console.log(user.accessToken)
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+    const res = await uploadVideo(formData, user.accessToken)
+    console.log(res)
+  }
+  return (
+    <>
+      <div className='min-h-screen bg-gray-800'>
+
+        {/* <form 
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          className=' flex items-center flex-col gap-5  '> */}
+
+          <label htmlFor="video">Uplode video</label>
+          <input 
+            name="video"
+            className='m-2 w-screen h-40  sm:w-3/5 md:max-w-5xl md:h-50  border-red-200 bg-gray-500' 
+            type="file" 
+            // accept='video/*' 
+            onChange={handleChange}
+          id='video' />
+
+          <label htmlFor="thumbnail">Uplode thumbnail</label>
+          <input 
+            name="thumbnail"
+            className='m-2 w-screen h-40  sm:w-3/5 md:max-w-5xl md:h-50  border-red-200 bg-gray-500' 
+            type="file" 
+            // accept='video/*' 
+            onChange={handleChange}
+          id='thumbnail' />
+
+
+          <label htmlFor="title">Title for the video</label>
+          <input 
+            name="title"
+            type="text" 
+            value={form.title}
+            onChange={handleChange}
+            className='m-2 w-screen h-10  sm:w-3/5 md:max-w-5xl   border-red-200 bg-gray-500'
+          />
+
+
+          <label htmlFor="discription">Discription for video</label>
+          <textarea 
+            name="description"
+            value={form.description}
+            type="text"
+            className='m-2 w-screen h-40  sm:w-3/5 md:max-w-5xl md:h-50  border-red-200 bg-gray-500'
+            onChange={handleChange}  
+          />
+          <button 
+          className='m-4 bg-blue-500'
+          onClick={handleSubmit}
+
+          // type="submit"
+          >
+            submit
+          </button>
+
+        {/* </form> */}
+      </div>
+    </>
+  )
+}
+
+export default UplodeVideo
