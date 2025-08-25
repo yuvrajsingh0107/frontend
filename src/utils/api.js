@@ -12,6 +12,12 @@ const authHeaders = (token) => ({
   "Authorization": `Bearer ${token}`
 });
 
+const authHeadersForFormData = (token) => ({
+  "Content-Type": "multipart/form-data",
+  "x-client": "ReactApp",          // your custom header
+  "Authorization": `Bearer ${token}`
+});
+
 // ====================== Auth ======================
 export const login = (data) => API.post("/users/login", data, { withCredentials: true });
 export const register = (data) => API.post("/users/regiseter", data, { withCredentials: true });
@@ -31,7 +37,7 @@ export const getUserWatchHistory = (token) => API.get(`/users/history`, { header
 export const fetchVideoById = (id) => API.get(`/videos/getVideo/${id}`).then(res => res.data);
 export const fetchVideosFeed = (page) => API.get(`/videos/feed`, { params: { page } }).then(res => res.data);
 
-export const uploadVideo = (data, token) => API.post(`/videos/uplodeVideo`, data, { headers: authHeaders(token) });
+export const uploadVideo = (data, token) => API.post(`/videos/uplodeVideo`, data, { headers: authHeadersForFormData(token) });
 export const deleteVideo = (id, token) => API.delete(`/videos/deleteVideo/${id}`, { headers: authHeaders(token) });
 export const fetchSearchResults = (searchQuery) => API.get(`/videos/search`, { params: {search : searchQuery} }).then(res => res.data.data);
 
