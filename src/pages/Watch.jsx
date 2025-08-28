@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { addComment, fetchVideoById, getComments, toggleLikeVideo } from "../utils/api"; // Axios instance
+import { addComment, fetchVideoById, getComments, refreshToken, toggleLikeVideo } from "../utils/api"; // Axios instance
 import { AuthContext } from "../context/AuthContext";
 // import CommentSection from "../components/CommentSection"; // Make later
 
@@ -19,16 +19,13 @@ export default function Watch() {
     fetchVideoById(id)
       .then(res => {
         setVideo(res.data);
-        // setComments(res.data.comments || []);
         setLikes((res.data.likes || 0));
-        console.log("res.data", res.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
       getComments(id,commentPage)
       .then(res => {
         setComments(res.data.data);
-        console.log("comments : ", res.data);
       })
       .catch(err => console.log(err));
   }, [id]);
@@ -40,51 +37,36 @@ export default function Watch() {
     e.preventDefault()
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const token = storedUser?.accessToken;
-    // console.log(newComment)
     const data = {
       content: newComment,
       videoId: video?._id || "",
       userId: user?._id || ""
     }
     setNewComment("");
-    // console.log(data)
     const res = await addComment(data,token);
     if (res.status !== 201) {
-      throw new Error("Failed to add comment");
+      // throw new Error("Failed to add comment");
+      const res = await refreshToken(user.refreshToken);
     }
     const updatedComments = await getComments(id, 1);
     setComments(updatedComments.data.data);
     setCommentsPage(1)
-    console.log("comments : ", updatedComments)
 
     // setComments(updatedComments);
-
-
-    console.log(res);
   }
 
   async function toggleLike(e) {
-    console.log("toggleLike called");
 
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const token = storedUser?.accessToken;
-    // console.log("token : ",token)
-
-    console.log("User from localStorage:", storedUser);
 
     const res = await toggleLikeVideo(video._id,token);
-    console.log("like res ", typeof (res.data))
-    console.log("like res ", res.data)
     if (res.data.data.like) {
       setLikes((prev) => prev + 1)
     } else {
-      console.log("in else :", res.data.like)
       setLikes((prev) => prev - 1)
     }
-    console.log("like toggled");
-    // setLikes();
   }
-  // console.log("video : ", video);
 
 
   const loadMoreComments = async () => {

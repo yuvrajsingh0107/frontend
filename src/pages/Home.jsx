@@ -18,7 +18,6 @@ function Home() {
   const loaderRef = useRef()
 
   useEffect(() => {
-    console.log("featching data for page: ", page)
     const fetchData = async () => {
       const result = await fetchVideosFeed(page);
       setVideos(result.data);
@@ -29,6 +28,7 @@ function Home() {
   }, []);
 
   useEffect( () => {
+    if(!searchQuery) return;
     ;(async () => {
       const res = await fetchSearchResults(searchQuery);
       setVideos(res);
@@ -49,13 +49,11 @@ async function fetchData(){
     if(res.data.length == 0){
       setHaseMoer(false);
     }
-    console.log(res)
   
     setVideos((prev) => [...prev , ...res.data])
     setPage(prev => prev + 1);
   
   } catch (error) {
-    console.log(error)
   } finally {
     setLoading(false);
   }
@@ -63,11 +61,9 @@ async function fetchData(){
 }
 
  useEffect(() => {
-  console.log("useEffect triggered")
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !loading) {
-          console.log("calling for page : ",page)
           fetchData();
         }
       },

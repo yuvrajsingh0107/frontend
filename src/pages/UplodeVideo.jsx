@@ -35,12 +35,8 @@ function UplodeVideo() {
     if(!user){
        alert("You must be logged in to upload a video");
     }
-    // console.log(user.accessToken)
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
     const res = await uploadVideo(formData, user.accessToken)
-    console.log(res)
+   
   }
   return (
     <>

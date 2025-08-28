@@ -4,11 +4,12 @@ import uplodeArrow from "../assets/upload-arrow-svgrepo-com.svg";
 
 import { AuthContext } from "../context/AuthContext";
 import { SearchContext } from "../context/SearchContext";
+import {  refreshToken } from "../utils/api";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const cardRef = useRef(null);
-  const {setSearchQuery} = useContext(SearchContext)
+  const { setSearchQuery } = useContext(SearchContext)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +32,6 @@ export default function Navbar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!search.trim()) return;
-    // navigate(`/search?q=${encodeURIComponent(search)}`);
     setSearchQuery(search.trim());
     navigate("/");
 
@@ -48,7 +48,6 @@ export default function Navbar() {
 
         {/* Search Bar */}
         <form
-          // onSubmit={handleSearch}
           className="flex-1 mx-6 flex items-center max-w-lg"
         >
           <input
@@ -81,7 +80,7 @@ export default function Navbar() {
             {open && (
               <div
                 ref={cardRef}
-                className="absolute right-0 mt-2 w-72 dark:bg-gray-700 dark:text-gray-200 bg-white text-gray-800 rounded-2xl shadow-2xl overflow-hidden z-50"
+                className="absolute right-0 mt-100 w-72 dark:bg-gray-700 dark:text-gray-200 bg-white text-gray-800 rounded-2xl shadow-2xl overflow-hidden z-50"
               >
                 {/* Cover image */}
                 <div className="h-20 bg-gray-300">
@@ -125,11 +124,11 @@ export default function Navbar() {
               </div>
             )}
 
-            <img 
-              className=" h-7 w-7" 
-              src={uplodeArrow} 
-              alt="" 
-              onClick={() => {navigate("/uplode")}}
+            <img
+              className=" h-7 w-7"
+              src={uplodeArrow}
+              alt=""
+              onClick={() => { navigate("/uplode") }}
             />
 
 

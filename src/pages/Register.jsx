@@ -40,7 +40,6 @@ export default function Register() {
           }
         }
       ); // For single file upload
-     // console.log("filses after : ", form)
     };
 
   const handleSubmit = async (e) => {
@@ -59,11 +58,7 @@ export default function Register() {
     
     
     try {
-      console.log("form : ", form)
-      console.log("formData  : ", formData);
-      // console.log(e.target.files)
       const res = await register(formData);
-      console.log("rigesterd user  : ", res)
        if(res.status === 201){
         const accessToken = res.data.data.accessToken;
         const refreshToken = res.data.data.refreshToken;
@@ -72,9 +67,6 @@ export default function Register() {
         logedInUser.accessToken = accessToken;
         logedInUser.refreshToken = refreshToken;
 
-        // console.log("login response : ", res );
-        // console.log("login response cookies : ", res.cookies );
-        console.log("logedInUSer : ", logedInUser);
         if(logedInUser){
           localStorage.setItem("user", JSON.stringify(logedInUser)); // Optional if you store in cookies
           // setUser();
@@ -195,53 +187,3 @@ export default function Register() {
   );
 }
 
-
-// import { useForm } from "react-hook-form"
-
-
-// export default function App() {
-//   const {
-//     register,
-//     handleSubmit,
-//     watch,
-//     formState: { errors },
-//   } = useForm()
-
-//   const { theme, setTheme } = useContext(ThemeContext)
-
-//   const onSubmit = (data) => console.log(data)
-
-
-//   console.log(watch("example")) // watch input value by passing the name of it
-
-
-//   return (
-//     <div className={theme === "dark" ? "dark" : ""}>
-//       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
-//         <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-md">
-//         {/* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
-//           <form onSubmit={handleSubmit(onSubmit)}>
-//             {/* register your input into the hook by invoking the "register" function */}
-//             <input
-//               defaultValue="test"
-//               {...register("example")}
-//               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring focus:ring-blue-500"
-//             />
-
-
-//             {/* include validation with required or other standard HTML validation rules */}
-//             <input 
-//             {...register("exampleRequired", { required: true })}
-//             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring focus:ring-blue-500"
-//             />
-//             {/* errors will return when field validation fails  */}
-//             {errors.exampleRequired && <span>This field is required</span>}
-
-
-//             <input type="submit" />
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }

@@ -18,14 +18,12 @@ export default function Login() {
   const [error, setError] = useState("");
 
    async function loginUser({userName, email, password}) {
-    console.log("login called ")
     const inputUser = {
       userName : (userName)? userName : null,
       email: email? email : null,
       password: password
     }
       try {
-        console.log("in try block")
         setLoading(true);
         const res = await login(inputUser);
 
@@ -36,19 +34,14 @@ export default function Login() {
         logedInUser.accessToken = accessToken;
         logedInUser.refreshToken = refreshToken;
 
-        // console.log("login response : ", res );
-        // console.log("login response cookies : ", res.cookies );
         console.log("logedInUSer : ", logedInUser);
   
         
         setUser(logedInUser);
         if(logedInUser){
           
-          // if (res.data?.token) {
             localStorage.setItem("user", JSON.stringify(logedInUser)); // Optional if you store in cookies
-            // }
-            // setUser();
-          console.log("redirection to / ");
+            
           navigate('/')
         } else{
           setError("Invalid credentials");
@@ -59,12 +52,6 @@ export default function Login() {
         setLoading(false);
       }
     }
-  //  for testing api 
-  // useEffect(() => {
-    
-  //   loginUser();
-  // } , [])
-
 
 
   const handleChange = (e) => {
@@ -77,13 +64,11 @@ export default function Login() {
     
 
     try {
-      console.log(form);
       const inputUser = {
         email: (form.emailOrUsername.includes("@")&& form.emailOrUsername.endsWith(".com"))? form.emailOrUsername : null,
         userName: form.emailOrUsername.includes("@")? null : form.emailOrUsername ,
         password: form.password
       }
-      console.log(inputUser);
       const res = loginUser(inputUser);
      
      

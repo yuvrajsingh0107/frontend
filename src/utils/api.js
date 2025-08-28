@@ -19,13 +19,14 @@ const authHeadersForFormData = (token) => ({
 });
 
 // ====================== Auth ======================
+// export const checkAuth = (token) => API.get("/users/checkAuth", { headers: authHeaders(token) });
 export const login = (data) => API.post("/users/login", data, { withCredentials: true });
 export const register = (data) => API.post("/users/regiseter", data, { withCredentials: true });
 export const logout = (token) => API.post("/users/logout", {}, { headers: authHeaders(token) });
 
+export const refreshToken = (refreshToken) => API.patch("/users/refresh-token", { refreshToken }, authHeaders(""));
 
 export const getProfile = (token) => API.get("/users/getUser", { headers: authHeaders(token) }).then(res => res.data);
-export const refreshToken = (token) => API.patch("/users/refresh-token", {}, { headers: authHeaders(token) });
 export const updateAvatar = (data, token) => API.patch("/users/updateAvatar", data, { headers: authHeaders(token) });
 export const updateCoverImage = (data, token) => API.patch("/users/updateCoverImage", data, { headers: authHeaders(token) });
 export const updateFullName = (data, token) => API.patch("/users/updateFullName", data, { headers: authHeaders(token) });
@@ -59,9 +60,11 @@ export const addComment = (data, token) =>   API.post(`/comment/addComment`, dat
 export const deleteComment = (commentId, token) =>   API.delete(`/comment/deleteComment/${commentId}`, { headers: authHeaders(token) });
 export const updateComment = (commentId, data, token) =>   API.put(`/comment/update/${commentId}`, data, { headers: authHeaders(token) });
 
-
-
-
+// ====================== Channel ======================
+export const getChannel = (_id) => API.get(`/channel/${_id}/1`).then(res => res.data);
+export const getChannelVideos = (_id, page) => API.get(`/videos/getChannelVideos/${_id}/${page}`).then(res => res.data);
+  
+1
 
 
 // import axios from "axios";

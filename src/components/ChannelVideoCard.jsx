@@ -1,21 +1,15 @@
 import React from 'react'
 import {motion} from 'framer-motion';
 
-function VideoCard({video }) {
-  console.log(video)
+function VideoCard({video , _id}) {
+
   const onClick = (e) => {
-    
-    if(e.target.id == "avatar" || e.target.id == "avatarDiv" || e.target.id == "avatarDivParent"){
-      window.location.href = `/channel/${video.ownerInfo[0]._id}`;
-    }else{
-      window.location.href = `/watch/${video._id}`;
-    }
+    window.location.href = `/watch/${video._id}`;
   }
   return (
     <div className='cursor-pointer'>
-            
               <motion.article
-                onClick={(event) => onClick(event)}
+                onClick={onClick}
                 key={video._id}
                 whileHover={{ scale: 1.01 }}
                 className="group cursor-pointer max-w-sm rounded-2 overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 bg-white"
@@ -38,18 +32,9 @@ function VideoCard({video }) {
                 </div>
 
                 {/* Content */}
-                <div id="avatarDivParent" className="p-3 flex gap-3 items-start bg-gray-900 text-white">
+                <div className="p-3 flex gap-3 items-start bg-gray-900 text-white">
                   {/* Avatar */}
-                  <div id='avatarDiv' className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                    <img
-                      // onClick={ navigateToChannel}
-                      id='avatar'
-                      src={video.ownerInfo[0].avatar}
-                      alt={`${video.ownerInfo[0].userName} avatar`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
+                 
 
                   {/* Text block */}
                   <div className="min-w-0 ">
@@ -58,8 +43,7 @@ function VideoCard({video }) {
                     </h3>
 
                     <div className="flex items-center text-xs text-gray-500 mt-1 gap-2 truncate">
-                      <span className="truncate">{video.ownerInfo[0].userName}</span>
-                      <span className="hidden sm:inline">•</span>
+                    
                       <span className="hidden sm:inline">{video.views ?? "0"} views</span>
                       <span className="hidden sm:inline">•</span>
                       <span className="hidden sm:inline">{video.createdAt}</span>
