@@ -3,6 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { addComment, fetchVideoById, getComments, refreshToken, toggleLikeVideo } from "../utils/api"; // Axios instance
 import { AuthContext } from "../context/AuthContext";
+import Notification from "../components/Notification";
+import ErrorMessage from "../components/ErrorMessage";
+import CommentBox from "../components/CommentBox";
 // import CommentSection from "../components/CommentSection"; // Make later
 
 export default function Watch() {
@@ -14,8 +17,12 @@ export default function Watch() {
   const [newComment, setNewComment] = useState("");
   const [likes, setLikes] = useState(0);
   const [commentPage, setCommentsPage] = useState(1);
+  const [message, setMassage] = useState("");
+
 
   useEffect(() => {
+
+
     fetchVideoById(id)
       .then(res => {
         setVideo(res.data);
@@ -30,41 +37,63 @@ export default function Watch() {
       .catch(err => console.log(err));
   }, [id]);
 
-  // useEffect(() => {}, [likes])
 
   async function handleCommentSubmit(e) {
     // Handle comment submission
-    e.preventDefault()
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const token = storedUser?.accessToken;
-    const data = {
-      content: newComment,
-      videoId: video?._id || "",
-      userId: user?._id || ""
-    }
-    setNewComment("");
-    const res = await addComment(data,token);
-    if (res.status !== 201) {
-      // throw new Error("Failed to add comment");
+    try {
+      e.preventDefault()
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const token = storedUser?.accessToken;
+      const data = {
+        content: newComment,
+        videoId: video?._id || "",
+        userId: user?._id || ""
+      }
+      setNewComment("");
+      const res = await addComment(data,token);
+      const updatedComments = await getComments(id, 1);
+      setComments(updatedComments.data.data);
+      setCommentsPage(1)
+    } catch (error) {
+      if(user){
+        setMassage("lagin againg to add comment session expire")
+      }else {
+        setMassage("login to add comment")
+      }
+      setTimeout(() => {
+        setMassage("");
+      }, 5000)
       const res = await refreshToken(user.refreshToken);
+      // console.log(res)
+      
     }
-    const updatedComments = await getComments(id, 1);
-    setComments(updatedComments.data.data);
-    setCommentsPage(1)
 
     // setComments(updatedComments);
   }
 
   async function toggleLike(e) {
 
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const token = storedUser?.accessToken;
-
-    const res = await toggleLikeVideo(video._id,token);
-    if (res.data.data.like) {
-      setLikes((prev) => prev + 1)
-    } else {
-      setLikes((prev) => prev - 1)
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const token = storedUser?.accessToken;
+  
+      const res = await toggleLikeVideo(video._id,token);
+      if (res.data.data.like) {
+        setLikes((prev) => prev + 1)
+      } else {
+        setLikes((prev) => prev - 1)
+      }
+    } catch (error) {
+      if(user){
+        setMassage("lagin againg to like session expire")
+      }else {
+        setMassage("login to like video")
+      }
+      setTimeout(() => {
+        setMassage("");
+      }, 5000)
+      const res = await refreshToken(user.refreshToken);
+      // console.log(res)
     }
   }
 
@@ -74,11 +103,6 @@ export default function Watch() {
     setComments((prev) => [...prev, ...res.data.data]);
     setCommentsPage((prev) => prev + 1);
   }
-
-
-
-
-
 
 
 
@@ -92,7 +116,9 @@ export default function Watch() {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100">
-
+      { message &&
+        <Notification message={message} />
+      }
       <div className=" w-full xl:max-w-6xl bg-gray-800 mx-auto">
         {/* Video Player */}
         <div className="aspect-auto w-full sm:flex sm:items-start sm:justify-center ">
@@ -158,24 +184,9 @@ export default function Watch() {
               {/* Comment List */}
               <div className="space-y-3">
                 {comments.map((comment) => (
-                  <div
-                    key={comment._id}
-                    className="p-3 bg-gray-700 rounded-lg"
-                  >
-                    <div className="flex items-center gap-6">
-                      <img src={comment.owner.avatar} className="w-7 h-7 rounded-full" alt="" />
-                      <div>
-                        <p>{comment.content}</p>
-                        <p className="text-sm text-gray-400 font-bold">{comment.owner?.userName || "User"}</p>
-                      </div>
-
-                    </div>
-
-                  </div>
+                 <CommentBox comment={comment} setMassage={setMassage} setComments={setComments} key={comment._id} />
                 ))}
-              </div>
-
-              <div>
+              
                 <button onClick={loadMoreComments}>
                   Load More
                 </button>

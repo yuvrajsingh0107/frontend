@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getChannel, getChannelVideos } from "../utils/api";
 import ChannelVideoCard from "../components/ChannelVideoCard";
 import ErrorMessage from "../components/ErrorMessage";
+import Notification from "../components/Notification";
 
 
 export default function Channel() {
@@ -11,7 +12,8 @@ export default function Channel() {
   const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("default error");
+  const [error, setError] = useState("");
+  const [massage, setMassage] = useState("");
 
 
   useEffect(() => {
@@ -45,6 +47,11 @@ export default function Channel() {
     const channelVideos = await getChannelVideos(_id, page);
     if (channelVideos.data.length == 0) {
       // notfi no more videos 
+      setMassage("No more videos uploded");
+      setTimeout(() => {
+        setMassage("");
+      }, 5000);
+      return;
     }
     setVideos(prevVideos => [...prevVideos, ...channelVideos.data]);
     setPage(prevPage => prevPage + 1);
@@ -62,6 +69,9 @@ export default function Channel() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
+      {massage &&
+        <Notification message={massage} />
+      }
       <ErrorMessage message={error} onClose={() => setError("")} />
       <div className="relative">
         <div className="h-48 w-full bg-gradient-to-r from-gray-800 to-gray-700">

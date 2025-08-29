@@ -55,10 +55,10 @@ export const toggleLikeComment = (commentId, token) =>  API.post(`/toggelLike/c/
 // ====================== Comment ======================
 export const getComments = (videoId, page, token) =>   API.get(`/comment/getAllComments/${videoId}/${page}`, { headers: authHeaders(token) });
 export const addComment = (data, token) =>   API.post(`/comment/addComment`, data, { headers: authHeaders(token) });
+export const updateComment = (commentId, data, token) =>   API.patch(`/comment/update/${commentId}`, data, { headers: authHeaders(token) });
 
 
 export const deleteComment = (commentId, token) =>   API.delete(`/comment/deleteComment/${commentId}`, { headers: authHeaders(token) });
-export const updateComment = (commentId, data, token) =>   API.put(`/comment/update/${commentId}`, data, { headers: authHeaders(token) });
 
 // ====================== Channel ======================
 export const getChannel = (_id) => API.get(`/channel/${_id}/1`).then(res => res.data);
