@@ -3,8 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { addComment, fetchVideoById, getComments, refreshToken, toggleLikeVideo } from "../utils/api"; // Axios instance
 import { AuthContext } from "../context/AuthContext";
-import Notification from "../components/Notification";
+import {Notification} from "../components/Notification";
 import ErrorMessage from "../components/ErrorMessage";
+import SubscribeButton from '../components/SubscribeButton';
 import CommentBox from "../components/CommentBox";
 // import CommentSection from "../components/CommentSection"; // Make later
 
@@ -18,26 +19,31 @@ export default function Watch() {
   const [likes, setLikes] = useState(0);
   const [commentPage, setCommentsPage] = useState(1);
   const [message, setMassage] = useState("");
+  const [isSunscribed, setIsSubscribed] = useState("false");
 
 
   useEffect(() => {
-
-
+    
+    
     fetchVideoById(id)
-      .then(res => {
-        setVideo(res.data);
-        setLikes((res.data.likes || 0));
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-      getComments(id,commentPage)
-      .then(res => {
-        setComments(res.data.data);
-      })
-      .catch(err => console.log(err));
+    .then(res => {
+      setVideo(res.data);
+      // console.log(video)
+      setLikes((res.data.likes || 0));
+      // console.log("is sub",req.data.isSunscribed)
+      setIsSubscribed(res.data.isSunscribed);
+      setLoading(false);
+    })
+    .catch(() => setLoading(false));
+    getComments(id,commentPage)
+    .then(res => {
+      setComments(res.data.data);
+    })
+    .catch(err => console.log(err));
   }, [id]);
-
-
+  
+  console.log("video : ",video)
+  
   async function handleCommentSubmit(e) {
     // Handle comment submission
     try {
@@ -152,6 +158,8 @@ export default function Watch() {
             >
               👍 {likes}
             </button>
+            <SubscribeButton isSunscribed={isSunscribed} setIsSubscribed={setIsSubscribed} channelId={video.owner}/>
+            
           </div>
           <div className="w-full h-px bg-amber-50 mt-10"></div>
           <p className="mt-3 text-gray-700 dark:text-gray-300">{video.description}</p>

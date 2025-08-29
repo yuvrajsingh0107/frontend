@@ -8,6 +8,7 @@ import {  refreshToken } from "../utils/api";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [searchField, setSearchField] = useState(false);
   const cardRef = useRef(null);
   const { setSearchQuery } = useContext(SearchContext)
   const navigate = useNavigate();
@@ -37,9 +38,20 @@ export default function Navbar() {
 
   };
 
+
+
+
+
+  const [focused, setFocused] = useState(false);
+  const inputRef = useRef(null);
+
   return (
+    <>
+    {
+      !searchField &&
+    
     <nav className="bg-gray-950 shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center md:justify-between">
 
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-blue-600">
@@ -48,21 +60,30 @@ export default function Navbar() {
 
         {/* Search Bar */}
         <form
-          className="flex-1 mx-6 flex items-center max-w-lg"
+          className="flex-1 mx-6 flex items-center justify-end max-w-lg"
         >
           <input
             type="text"
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 border text-white border-gray-300 rounded-l-full px-4 py-2 outline-none"
+            className=" hidden  md:block flex-1 border text-white border-gray-300 rounded-l-full px-4 py-2 outline-none"
           />
           <button
             type="submit"
             onClick={handleSearch}
-            className="bg-blue-500 text-white px-4 py-2 rounded-r-full hover:bg-blue-600"
+            className="bg-blue-500 text-white px-4 py-2 hidden md:block md:rounded-l-none md:rounded-r-full hover:bg-blue-600"
           >
             🔍
+          </button
+          
+          >
+
+          <button
+            className="bg-blue-500 text-white px-2 py-2  md:hidden rounded-full hover:bg-blue-600"
+            onClick={() => setSearchField(true)}
+          >
+          🔍
           </button>
         </form>
 
@@ -146,5 +167,67 @@ export default function Navbar() {
 
       </div>
     </nav>
+  } 
+  {
+    searchField && 
+    <div className="w-full max-w-md mx-auto select-none bg-slate-900 text-slate-100 ">
+      {/* Sticky Header */}
+      <div className="flex items-center gap-2 px-3 py-3 sticky top-0 z-30 bg-slate-900/80 backdrop-blur border-b border-slate-800">
+        
+          {/* Back button */}
+          
+
+          {/* Search field */}
+          <div
+            className={`flex items-center gap-2 flex-1 rounded-2xl px-3  ring-1 bg-slate-800/80 shadow-sm transition ${
+              focused ? "ring-2 ring-blue-500" : "ring-slate-700"
+            }`}
+          >
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              className="w-full bg-transparent outline-none text-slate-100 placeholder:text-slate-400 text-[15px]"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="p-1.5 rounded-full hover:bg-slate-700"
+              >
+                ✖
+              </button>
+            )}
+            <button
+               type="submit"
+               onClick={handleSearch}
+              className="p-1.5 rounded-full hover:bg-slate-700"
+            >
+              🔍
+            </button>
+          </div>
+
+          {/* Cancel button */}
+          <button
+          onClick={()=>setSearchField(false)}
+            className={`text-sm font-medium transition px-2 py-1 rounded-xl text-blue-400 `} >
+            Cancel
+        </button>
+      </div>
+
+      {/* Suggestions */}
+    
+
+      {/* Demo buttons */}
+     
+    </div>
+  }
+
+
+    </>
   );
 }

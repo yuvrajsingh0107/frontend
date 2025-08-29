@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getChannel, getChannelVideos } from "../utils/api";
 import ChannelVideoCard from "../components/ChannelVideoCard";
 import ErrorMessage from "../components/ErrorMessage";
-import Notification from "../components/Notification";
+import { Notification } from "../components/Notification";
 
 
 export default function Channel() {
@@ -59,13 +59,15 @@ export default function Channel() {
 
   const stats = useMemo(() => {
     return {
-      subscribers: channel?.subscriberCount ?? 0,
-      subscribed: channel?.subscribedChannelCount ?? 0,
+      subscribers: channel?.subscribers ?? 0,
+      subscribed: channel?.subscribed ?? 0,
       totalViews: channel?.totalViews,
       totalLikes: channel?.likes,
       totalVideos: channel?.totalVideos,
     };
   }, [channel, videos]);
+  console.log("channel : ", channel);
+  console.log("states : ", stats)
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
