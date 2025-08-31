@@ -5,6 +5,7 @@ import uplodeArrow from "../assets/upload-arrow-svgrepo-com.svg";
 import { AuthContext } from "../context/AuthContext";
 import { SearchContext } from "../context/SearchContext";
 import {  refreshToken } from "../utils/api";
+import SideBarHome from "./SideBarHome";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -12,6 +13,9 @@ export default function Navbar() {
   const cardRef = useRef(null);
   const { setSearchQuery } = useContext(SearchContext)
   const navigate = useNavigate();
+
+
+  const [sidebar, setSideBar] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -47,11 +51,28 @@ export default function Navbar() {
 
   return (
     <>
+   
+    
     {
       !searchField &&
     
-    <nav className="bg-gray-950 shadow-md sticky top-0 z-50">
+    <nav className=" bg-gray-950 shadow-md sticky top-0 z-52">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center md:justify-between">
+      <svg 
+      onClick={() => setSideBar(true)}
+      width="50px" 
+      height="50px" 
+      viewBox="0 0 24 24" fill
+      ="none" 
+      xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path d="M20 7L4 7" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path> 
+          <path d="M20 12L4 12" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path> 
+          <path d="M20 17L4 17" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path>
+       </g>
+      </svg>
 
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-blue-600">
@@ -227,7 +248,25 @@ export default function Navbar() {
     </div>
   }
 
+  {sidebar &&
+      <div>
+      <div onClick={() => setSideBar(false)} className='absolute w-full h-full backdrop-blur-sm  z-25'>
+      </div>
+  
+  
+      <div className='fixed  m-2 p-4 w-60 flex flex-col gap-4 rounded h-17/20 bg-gray-700  z-50  shadow-[5px_5px_rgba(100,_98,_100,_0.4),_10px_10px_rgba(100,_98,_100,_0.3),_15px_15px_rgba(100,_98,_100,_0.2),_20px_20px_rgba(100,_98,_100,_0.1),_25px_25px_rgba(100,_98,_100,_0.05)]'>
+            <div className='flex gap-2'>
+              <button className='text-gray-900 w-1/2 hover:text-white border-2 border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800'>Video</button>
+              <button className='text-gray-900 w-1/2 hover:text-white border-2 border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800'>Tweet</button>
+            </div>
+            <button className='w-full text-gray-900  hover:text-white border-2 border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800'>button</button>
+            <button className='w-full text-gray-900  hover:text-white border-2 border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800'>button</button>
+            <button className='w-full text-gray-900  hover:text-white border-2 border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800'>button</button>
+        </div>
+      </div>
+    }
+
 
     </>
   );
-}
+};

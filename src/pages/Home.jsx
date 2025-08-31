@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import VideoCard from '../components/VideoCard.jsx';
 import { AuthContext } from '../context/AuthContext.jsx';
 import {SearchContext} from '../context/SearchContext.jsx';
+import SideBarHome from '../components/SideBarHome.jsx';
 
 function Home() {
   
   const {user, setUser} = useContext(AuthContext)
+  // console.log(user)
   const { searchQuery} = useContext(SearchContext);
 
 
@@ -16,6 +18,9 @@ function Home() {
   const [page, setPage] = useState(1);
   const [hasMore, setHaseMoer] = useState(true);
   const loaderRef = useRef()
+
+
+  const [sideBar, setSideBar] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,12 +84,17 @@ async function fetchData(){
     };
   }, [loaderRef, loading]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!videos.length) return <div>No videos found</div>;
+  // if (!sideBar && loading) return <div>Loading...</div>;
+  // if (!sideBar && !videos.length) return <div>No videos found</div>;
   return (
     
     
+    
     <div className="bg-gray-800 min-h-screen text-white">
+      {/* {
+      sideBar && 
+      <SideBarHome />
+    } */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 p-4">
                   {
           videos.map((video) => (

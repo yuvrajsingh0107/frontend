@@ -1,10 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { addComment, fetchVideoById, getComments, refreshToken, toggleLikeVideo } from "../utils/api"; // Axios instance
+import { addComment, addVideoToWatchHistory, fetchVideoById, getComments, incrimentViews, refreshToken, toggleLikeVideo } from "../utils/api"; // Axios instance
 import { AuthContext } from "../context/AuthContext";
 import {Notification} from "../components/Notification";
-import ErrorMessage from "../components/ErrorMessage";
 import SubscribeButton from '../components/SubscribeButton';
 import CommentBox from "../components/CommentBox";
 // import CommentSection from "../components/CommentSection"; // Make later
@@ -13,28 +12,28 @@ export default function Watch() {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const [video, setVideo] = useState(null);
+  const [watched, setWatched] = useState(false);
+  const minWatchTimeRiq = 10;
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [likes, setLikes] = useState(0);
   const [commentPage, setCommentsPage] = useState(1);
   const [message, setMassage] = useState("");
-  const [isSunscribed, setIsSubscribed] = useState("false");
-
-
+  
+  
   useEffect(() => {
-    
-    
     fetchVideoById(id)
     .then(res => {
       setVideo(res.data);
-      // console.log(video)
+      // console.log("Fetched video:", res.data); 
       setLikes((res.data.likes || 0));
-      // console.log("is sub",req.data.isSunscribed)
-      setIsSubscribed(res.data.isSunscribed);
+      
       setLoading(false);
     })
-    .catch(() => setLoading(false));
+    .catch((error) =>{ 
+      console.error(error)
+      setLoading(false)})
     getComments(id,commentPage)
     .then(res => {
       setComments(res.data.data);
@@ -42,14 +41,28 @@ export default function Watch() {
     .catch(err => console.log(err));
   }, [id]);
   
-  console.log("video : ",video)
+  // console.log("video : ",video)
+
+  const handelTimeUpdta = async (currentTime) => {
+    if (!watched && (currentTime >= video.duration - 2 || currentTime >= minWatchTimeRiq)) {
+      setWatched(true);
+      if (user !== null) {
+        await incrimentViews(video._id, user._id);
+        await addVideoToWatchHistory(video._id, user._id);
+      }
+    }
+  };
+  
   
   async function handleCommentSubmit(e) {
     // Handle comment submission
     try {
       e.preventDefault()
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      const token = storedUser?.accessToken;
+      // const storedUser = JSON.parse(localStorage.getItem("user"));
+      const token = user?.accessToken;
+      if(user !== null) {
+        console.log("user for access token : ", user);
+      }
       const data = {
         content: newComment,
         videoId: video?._id || "",
@@ -69,36 +82,38 @@ export default function Watch() {
       setTimeout(() => {
         setMassage("");
       }, 5000)
-      const res = await refreshToken(user.refreshToken);
-      // console.log(res)
-      
+      if(user === null){
+        const res = await refreshToken(user.refreshToken);
+      }
     }
-
-    // setComments(updatedComments);
   }
 
   async function toggleLike(e) {
 
     try {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      const token = storedUser?.accessToken;
-  
-      const res = await toggleLikeVideo(video._id,token);
+      // const storedUser = JSON.parse(localStorage.getItem("user"));
+      // const token = storedUser?.accessToken;
+      if(!user) {
+        setMassage("login to like video");
+        return;
+      }
+
+      const res = await toggleLikeVideo(video._id,user.accessToken);
       if (res.data.data.like) {
-        setLikes((prev) => prev + 1)
+        setLikes((prev) => prev + 1);
       } else {
-        setLikes((prev) => prev - 1)
+        setLikes((prev) => prev - 1);
       }
     } catch (error) {
       if(user){
-        setMassage("lagin againg to like session expire")
+        setMassage("login again to like session expire");
       }else {
-        setMassage("login to like video")
+        setMassage("login to like video");
       }
       setTimeout(() => {
         setMassage("");
       }, 5000)
-      const res = await refreshToken(user.refreshToken);
+      // const res = await refreshToken(user.refreshToken);
       // console.log(res)
     }
   }
@@ -128,12 +143,12 @@ export default function Watch() {
       <div className=" w-full xl:max-w-6xl bg-gray-800 mx-auto">
         {/* Video Player */}
         <div className="aspect-auto w-full sm:flex sm:items-start sm:justify-center ">
-          {/* <p className="text-white">video id : {video.videoFile}</p> */}
-          {/* <video src="https://res.cloudinary.com/dixsg9gz0/video/upload/v1754501521/rvlhnilvsynwhkmtvdw6.mp4" controls /> */}
-
+        
           <ReactPlayer
             src={video.videoFile}
             controls={true}
+            autoPlay={false}
+            onProgress={({ playedSeconds }) => handelTimeUpdta(playedSeconds)}
             // autoplay nahi
             width="auto"
             height="90%"
@@ -158,8 +173,7 @@ export default function Watch() {
             >
               👍 {likes}
             </button>
-            <SubscribeButton isSunscribed={isSunscribed} setIsSubscribed={setIsSubscribed} channelId={video.owner}/>
-            
+            <SubscribeButton channelId={video.owner}/>
           </div>
           <div className="w-full h-px bg-amber-50 mt-10"></div>
           <p className="mt-3 text-gray-700 dark:text-gray-300">{video.description}</p>
@@ -168,11 +182,11 @@ export default function Watch() {
           <div className="mt-6">
             <div className="mt-6">
               <h2 className="text-lg font-semibold mb-4">
-                Comments ({comments.length})
+                Comments ({comments?.length})
               </h2>
 
-              {/* Comment Form */}
-              <form onSubmit={(e) => handleCommentSubmit(e)} className="mb-4 flex gap-2">
+               Comment Form onSubmit={(e) => handleCommentSubmit(e)}
+              <form  className="mb-4 flex gap-2">
                 <input
                   type="text"
                   placeholder="Add a comment..."
@@ -189,10 +203,10 @@ export default function Watch() {
                 </button>
               </form>
 
-              {/* Comment List */}
+              
               <div className="space-y-3">
                 {comments.map((comment) => (
-                 <CommentBox comment={comment} setMassage={setMassage} setComments={setComments} key={comment._id} />
+                 <CommentBox comment={comment} setComments={setComments} key={comment._id} />
                 ))}
               
                 <button onClick={loadMoreComments}>
@@ -200,9 +214,9 @@ export default function Watch() {
                 </button>
               </div>
             </div>
-          </div>
+          </div> 
         </div>
       </div>
-    </div>
+     </div>
   );
 }

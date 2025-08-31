@@ -24,6 +24,8 @@ export const login = (data) => API.post("/users/login", data, { withCredentials:
 export const register = (data) => API.post("/users/regiseter", data, { withCredentials: true });
 export const logout = (token) => API.post("/users/logout", {}, { headers: authHeaders(token) });
 
+export const addVideoToWatchHistory = (videoId, token) => API.patch(`/users/addTohistory/${videoId}`,{}, {headers: authHeaders(token)});
+
 export const refreshToken = (refreshToken) => API.patch("/users/refresh-token", { refreshToken }, authHeaders(""));
 
 export const getProfile = (token) => API.get("/users/getUser", { headers: authHeaders(token) }).then(res => res.data);
@@ -38,6 +40,8 @@ export const getUserWatchHistory = (token) => API.get(`/users/history`, { header
 export const fetchVideoById = (id) => API.get(`/videos/getVideo/${id}`).then(res => res.data);
 export const fetchVideosFeed = (page) => API.get(`/videos/feed`, { params: { page } }).then(res => res.data);
 
+export const incrimentViews = (videoId,token) => API.patch(`/videos/addView/${videoId}`,{},{headers: authHeaders(token)} )
+
 export const uploadVideo = (data, token) => API.post(`/videos/uplodeVideo`, data, { headers: authHeadersForFormData(token) });
 export const deleteVideo = (id, token) => API.delete(`/videos/deleteVideo/${id}`, { headers: authHeaders(token) });
 export const fetchSearchResults = (searchQuery) => API.get(`/videos/search`, { params: {search : searchQuery} }).then(res => res.data.data);
@@ -46,6 +50,8 @@ export const fetchSearchResults = (searchQuery) => API.get(`/videos/search`, { p
 export const toggleSubscribe = (channelId, token) => API.post(`/subscribe/${channelId}`, {}, { headers: authHeaders(token) });
 export const getSubscribers = (token) => API.get(`/subscribe/getSubscribers`, { headers: authHeaders(token) });
 export const getSubscribedChannels = (token) => API.get(`/subscribe/getSubscribedChannels`, { headers: authHeaders(token) });
+export const isChannelSubscribed = (channelId, token) => API.get(`/subscribe/isSubscribed/${channelId}`, { headers: authHeaders(token) });
+
 
 // ====================== Like ======================
 export const toggleLikeVideo = (videoId, token) =>  API.post(`/toggelLike/v/${videoId}`, {}, { headers: authHeaders(token) });
