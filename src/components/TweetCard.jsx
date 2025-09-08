@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import like from '../assets/like.svg';
+import likedSVG from '../assets/liked.svg';
 import { AuthContext } from '../context/AuthContext';
 import { likeTweet } from '../utils/api';
 import navigator from 'react';
@@ -10,11 +11,15 @@ function TweetCard({tweet}) {
   const {user} = useContext(AuthContext);
   const [error , setError] = useState("");
   const [likes, setLikes] = useState(tweet.likes);
+
+  const [liked,setLiked] = useState(tweet.isliked)
   useEffect(() => {
     setTimeout(() => {
       if(error) setError("");
     }, 5000)
   }, [error])
+
+  
 
   const handelLike = async () => {
     if(!user){
@@ -27,6 +32,13 @@ function TweetCard({tweet}) {
         }
       } catch (error) {
         setError(error.message);
+      } finally {
+        if(liked){
+          setLikes(prev => prev - 1);
+        }else {
+          setLikes(prev => prev + 1);
+        }
+        setLiked(!liked);
       }
     }
   }
@@ -35,7 +47,7 @@ function TweetCard({tweet}) {
   }
   
   return (
-    <div>
+    <div key={tweet._id}>
       
       <div className=' text-white w-full flex flex-col items-center border-2 border-amber-100 pb-1 ' >
       <div className='px-4 pt-4 w-full'>
@@ -56,7 +68,12 @@ function TweetCard({tweet}) {
           <p>{tweet.owner.fullName}</p>
         </div>
         <button onClick={() => handelLike()} className=' flex w-20 gap-2 px-3  items-center'>
+          {
+            liked &&
+            <img className='w-5' src={likedSVG} alt="liked" />
+            ||
           <img className='w-5' src={like} alt="like" />
+          }
           <h2>{likes}</h2>
         </button>
       </div>

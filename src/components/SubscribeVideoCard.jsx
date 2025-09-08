@@ -3,7 +3,7 @@ import React from 'react'
 function SubscribeVideoCard() {
   return (
     <div className='bg-gray-800 flex gap-10 p-4 rounded-lg'>
-      <img className='bg-red-400 w-2/5 h-50' src="" alt="" />
+      <img className='bg-red-400 w-2/5 h-50' src={null} alt="" />
       <div className='w-3/5 h-full flex flex-col justify-between'>
       <div>
 

@@ -8,7 +8,7 @@ import { getTweetFeed } from "../utils/api";
 
 function Tweet() {
   
-
+  // const {user} = useContext(AuthContext);
   const [tweets, setTweets] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,8 @@ function Tweet() {
   useEffect(() => {
     async function  getTweet() {
       console.log("in use effect")
-      const res =  await getTweetFeed(page)
+      console.log(user?._id)
+      const res =  await getTweetFeed(page,user?._id)
       // console.log(res)
       if(res){
         setTweets(res.data.data)
@@ -27,7 +28,7 @@ function Tweet() {
       console.log(res.data);
     }
     getTweet();
-  },[])
+  },[user])
   
   return (
     <>
@@ -45,7 +46,7 @@ function Tweet() {
       <div className=' w-screen md:w-2/4 mt-4 flex flex-col gap-3 '>
        {
         tweets &&
-        tweets.map((tweet) => <TweetCard tweet={tweet} />)
+        tweets.map((tweet) => <TweetCard key={tweet._id} tweet={tweet} />)
        }
       </div>
       <div className='w-1/4 '>

@@ -72,7 +72,7 @@ export const getChannelVideos = (_id, page) => API.get(`/videos/getChannelVideos
   
 // ====================== tweet ======================
 export const postTweet = (data, token) => API.post("/tweet/create",data, { headers: authHeaders(token) });
-export const getTweetFeed = (page) => API.get(`/tweet/feed/${page}`);
+export const getTweetFeed = (page,userId) => API.get(`/tweet/feed/${page}/${userId}`);
 export const likeTweet = (tweetId, token) => API.post(`/tweet/like/${tweetId}`, {}, { headers: authHeaders(token) });
 // export const retweet = (tweetId, token) => API.post(`/tweets/${tweetId}/retweet`, {}, { headers: authHeaders(token) });
 // export const replyToTweet = (tweetId, data, token) => API.post(`/tweets/${tweetId}/reply`, data, { headers: authHeaders(token) });
