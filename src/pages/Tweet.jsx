@@ -20,6 +20,7 @@ function Tweet() {
     async function  getTweet() {
       console.log("in use effect")
       const res =  await getTweetFeed(page)
+      // console.log(res)
       if(res){
         setTweets(res.data.data)
       }

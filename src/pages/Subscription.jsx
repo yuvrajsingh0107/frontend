@@ -53,7 +53,7 @@ function Subscription() {
           {
            content === "tweet" &&
             <div>
-              <TweetCard tweet={{}} />
+              {/* <TweetCard tweet={{}} /> */}
              
             </div>
 

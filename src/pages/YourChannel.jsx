@@ -14,9 +14,24 @@ function YourChannel() {
   useEffect(()=>{
     
   },[currentContent]);
+  // console.log(user)
+  if(user?.fullName == "null")(
+    <>
+     
+    </>
+  )
 
   return (
-    
+
+    <>
+
+    {
+      !user &&
+       <div className='w-screen h-screen text-white text-2xl font-bold text-center'>
+        login to view your channel
+      </div>
+    }
+     { user &&   
     <div className=' h-screen'>
       {
         UplodeForm && <>
@@ -39,16 +54,16 @@ function YourChannel() {
       <div>
         <img 
         className='w-screen h-30 sm:h-40 bg-red-400'
-        src={user.coverImage} 
+        src={user?.coverImage} 
         alt="coveimage"  />
         <img 
         className='absolute left-6 top-30 sm:left-10 sm:top-28 w-40 h-40 rounded-full bg-green-400'
-        src={user.avatar} alt="avatar" />
+        src={user?.avatar} alt="avatar" />
         <div className=' md:flex justify-between m ml-50 sm:ml-60 mb-4  text-gray-100'>
           <div>
-            <h3>{user.fullName}</h3>
-            <h3>{user.userName}</h3>
-            <h3>{user.email}</h3>
+            <h3>{user?.fullName}</h3>
+            <h3>{user?.userName}</h3>
+            <h3>{user?.email}</h3>
           </div>
           <div className='flex mt-5 md:mr-10  gap-1'>
             <button onClick={() => setUplodeForm(true)} className='bg-blue-400 md:px-20 hover:bg-blue-200 px-2 border-1 rounded'>Add Video</button>
@@ -89,7 +104,9 @@ function YourChannel() {
           }
         </button>
       </div>
-    </div>
+    </div>}
+  </>
+
   )
 }
 
