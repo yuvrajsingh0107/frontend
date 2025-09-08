@@ -1,8 +1,8 @@
 import React from 'react'
 import {motion} from 'framer-motion';
 
-function VideoCard({video }) {
-  console.log(video)
+function VideoCard({video}) {
+  // console.log(video)
   const onClick = (e) => {
     
     if(e.target.id == "avatar" || e.target.id == "avatarDiv" || e.target.id == "avatarDivParent"){

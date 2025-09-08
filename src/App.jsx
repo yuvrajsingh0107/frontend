@@ -7,6 +7,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import VideoUploadPage from './pages/UplodeVideo';
 import Channel from './pages/Channel';
+import Tweet from './pages/Tweet';
+import Subscription from './pages/Subscription';
+import Library from './pages/Library';
+import YourChannel from './pages/YourChannel';
 function App() {
   Route
   return (
@@ -19,6 +23,11 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/uplode" element={<VideoUploadPage />}/>
         <Route path="/channel/:_id" element={<Channel />}/>
+        <Route path="/tweet/" element={<Tweet />}/>
+        <Route path="/subscription/" element={<Subscription />}/>
+        <Route path="/library/" element={<Library />}/>
+        <Route path="/yourchannel/" element={<YourChannel />}/>
+
         {/* <Route path="/:id" element={<Home />} /> */}
         {/* <Route path="/:id/related" element={<Home />} /> */}
       </Routes>

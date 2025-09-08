@@ -33,15 +33,10 @@ export default function Login() {
         
         logedInUser.accessToken = accessToken;
         logedInUser.refreshToken = refreshToken;
-
-        console.log("logedInUSer : ", logedInUser);
-  
-        
+        // console.log("logedInUSer : ", logedInUser);
         setUser(logedInUser);
         if(logedInUser){
-          
-            localStorage.setItem("user", JSON.stringify(logedInUser)); // Optional if you store in cookies
-            
+          localStorage.setItem("user", JSON.stringify(logedInUser)); // Optional if you store in cookies
           navigate('/')
         } else{
           setError("Invalid credentials");
@@ -69,11 +64,7 @@ export default function Login() {
         userName: form.emailOrUsername.includes("@")? null : form.emailOrUsername ,
         password: form.password
       }
-      const res = loginUser(inputUser);
-     
-     
-
-
+      await loginUser(inputUser);
     
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");

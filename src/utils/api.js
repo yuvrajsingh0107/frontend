@@ -70,7 +70,13 @@ export const deleteComment = (commentId, token) =>   API.delete(`/comment/delete
 export const getChannel = (_id) => API.get(`/channel/${_id}/1`).then(res => res.data);
 export const getChannelVideos = (_id, page) => API.get(`/videos/getChannelVideos/${_id}/${page}`).then(res => res.data);
   
-1
+// ====================== tweet ======================
+export const postTweet = (data, token) => API.post("/tweet/create",data, { headers: authHeaders(token) });
+export const getTweetFeed = (page) => API.get(`/tweet/feed/${page}`);
+export const likeTweet = (tweetId, token) => API.post(`/tweet/like/${tweetId}`, {}, { headers: authHeaders(token) });
+// export const retweet = (tweetId, token) => API.post(`/tweets/${tweetId}/retweet`, {}, { headers: authHeaders(token) });
+// export const replyToTweet = (tweetId, data, token) => API.post(`/tweets/${tweetId}/reply`, data, { headers: authHeaders(token) });
+// export const getTweetReplies = (tweetId, token) => API.get(`/tweets/${tweetId}/replies`, { headers: authHeaders(token) }).then(res => res.data);
 
 
 // import axios from "axios";

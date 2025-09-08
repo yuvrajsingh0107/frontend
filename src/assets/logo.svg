@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-labelledby="t2 d2">
+  <title id="t2">MY Tube - MT icon</title>
+  <desc id="d2">Rounded square icon with light blue gradient and MT monogram.</desc>
+
+  <defs>
+    <linearGradient id="g2" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#DFF9FF"/>
+      <stop offset="1" stop-color="#7FD8FF"/>
+    </linearGradient>
+
+    <filter id="s2" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0b1620" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#s2)">
+    <rect x="8" y="8" width="104" height="104" rx="20" fill="url(#g2)"/>
+    <path d="M8 8h104v48c-20 6-50 6-60 4C36 60 12 54 8 56V8z" fill="#ffffff" opacity="0.03"/>
+    <text x="28" y="76" font-family="Inter, Segoe UI, Roboto, Arial, sans-serif" font-weight="800" font-size="48" fill="#2E373B" letter-spacing="-3">
+      MT
+    </text>
+  </g>
+</svg>
