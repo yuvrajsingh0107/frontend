@@ -40,7 +40,7 @@ function UplodeVideoForm({setUplodeForm}) {
     }
   return (
      <>
-      <div className=' absolute sm:absolute  sm:left-1/2 sm:-translate-x-1/2 sm:top-22 sm:pt-10 rounded z-50  bg-gray-800'>
+      <div className=' absolute sm:absolute  sm:left-1/2 sm:-translate-x-1/2 sm:top-22 sm:pt-10 rounded-2xl border-2 border-gray-300 z-50  bg-gray-800'>
         <form
           onSubmit={(event) => handleSubmit(event)}
           encType="multipart/form-data"

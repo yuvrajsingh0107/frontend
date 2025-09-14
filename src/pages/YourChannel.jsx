@@ -46,7 +46,7 @@ function YourChannel() {
           <div onClick={() => setPostForm(false)} className='fixed w-full h-full backdrop-blur-sm  z-25'>
           </div>
 
-          <div className='absolute left-3/7 z-60'>
+          <div className='absolute w-100  left-3/8 z-60'>
             <TweetForm />
           </div>
         </>

@@ -139,7 +139,7 @@ function Navbar() {
                         className="w-16 h-16 rounded-full border-4 border-white shadow-md"
                       />
                       <div className="ml-3 overflow-hidden">
-                        <h2 className="font-semibold text-lg truncate">{user.name || "John Doe"}</h2>
+                        <h2 className="font-semibold text-lg truncate">{user.userName || "John Doe"}</h2>
                         <p className="text-sm text-gray-500 truncate max-w-[160px]">
                           {user.email || "johndoeverylongemailaddress@exampledomain.com"}
                         </p>
@@ -148,8 +148,11 @@ function Navbar() {
 
                     {/* Actions */}
                     <ul className="mt-4 px-4 pb-4 space-y-2">
-                      <li className="hover:bg-gray-600 p-2 rounded-lg cursor-pointer">Profile</li>
-                      <li className="hover:bg-gray-600 p-2 rounded-lg cursor-pointer">Settings</li>
+                      <li 
+                        onClick={() => navigate("/yourchannel")}
+                        className="hover:bg-gray-600 p-2 rounded-lg cursor-pointer">
+                          Profile
+                        </li>
                       <li
                         className="hover:bg-gray-600 p-2 rounded-lg cursor-pointer text-red-600"
                         onClick={() => {
