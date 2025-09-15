@@ -1,13 +1,11 @@
 import { useEffect, useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import uplodeArrow from "../assets/upload-arrow-svgrepo-com.svg";
 
 import { AuthContext } from "../context/AuthContext";
-  import { SearchContext } from "../context/SearchContext";
+import { SearchContext } from "../context/SearchContext";
 import SideBarHome from "./SideBarHome";
 
 function Navbar() {
-
   const [open, setOpen] = useState(false);
   const [searchField, setSearchField] = useState(false);
   const cardRef = useRef(null);
@@ -50,8 +48,7 @@ function Navbar() {
     <>
       {
         !searchField &&
-
-        <nav className="relative px-4 py-1   bg-gray-950  w-full  ">
+        <nav className="relative px-4 py-1 bg-gray-950  w-full">
           <div className="  flex items-center justify-between">
 
             <div className="flex items-center gap-4">
@@ -60,27 +57,26 @@ function Navbar() {
                 onClick={() => setSideBar(true)}
                 width="30px"
                 height="30px"
-              viewBox="0 0 24 24" fill
-              ="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-              <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <path d="M20 7L4 7" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path>
-                <path d="M20 12L4 12" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path>
-                <path d="M20 17L4 17" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path>
-              </g>            </svg>
+                viewBox="0 0 24 24" 
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path d="M20 7L4 7" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path>
+                  <path d="M20 12L4 12" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path>
+                  <path d="M20 17L4 17" stroke="#d5d8e2" strokeWidth="1.5" strokeLinecap="round"></path>
+                </g>
+              </svg>
 
-            {/* Logo */}
-            <Link to="/" className="text-2xl font-bold text-blue-600">
-              MyTube
-            </Link>
+              {/* Logo */}
+              <Link to="/" className="text-2xl font-bold text-blue-600">
+                MyTube
+              </Link>
             </div>
 
             {/* Search Bar */}
-            <form
-              className="flex-1 mx-6 flex items-center justify-end max-w-lg"
-            >
+            <form className="flex-1 mx-6 flex items-center justify-end max-w-lg">
               <input
                 type="text"
                 placeholder="Search..."
@@ -94,9 +90,7 @@ function Navbar() {
                 className="bg-blue-500 border border-blue-500 text-white px-4 py-1 hidden md:block md:rounded-l-none md:rounded-r-full hover:bg-blue-600"
               >
                 🔍
-              </button
-
-              >
+              </button>
 
               <button
                 className="bg-blue-500 text-white px-2 py-2  md:hidden rounded-full hover:bg-blue-600"
@@ -148,11 +142,11 @@ function Navbar() {
 
                     {/* Actions */}
                     <ul className="mt-4 px-4 pb-4 space-y-2">
-                      <li 
+                      <li
                         onClick={() => navigate("/yourchannel")}
                         className="hover:bg-gray-600 p-2 rounded-lg cursor-pointer">
-                          Profile
-                        </li>
+                        Profile
+                      </li>
                       <li
                         className="hover:bg-gray-600 p-2 rounded-lg cursor-pointer text-red-600"
                         onClick={() => {
@@ -166,13 +160,6 @@ function Navbar() {
                     </ul>
                   </div>
                 )}
-
-                {/* <img
-                  className=" h-7 w-7"
-                  src={uplodeArrow}
-                  alt=""
-                  onClick={() => { navigate("/uplode") }}
-                /> */}
 
               </div>
             ) : (
@@ -200,8 +187,7 @@ function Navbar() {
 
             {/* Search field */}
             <div
-              className={`flex items-center gap-2 flex-1 rounded-2xl px-3  ring-1 bg-slate-800/80 shadow-sm transition ${focused ? "ring-2 ring-blue-500" : "ring-slate-700"
-                }`}
+              className={`flex items-center gap-2 flex-1 rounded-2xl px-3  ring-1 bg-slate-800/80 shadow-sm transition ${focused ? "ring-2 ring-blue-500" : "ring-slate-700"}`}
             >
               <input
                 ref={inputRef}

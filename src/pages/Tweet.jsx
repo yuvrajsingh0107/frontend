@@ -89,7 +89,7 @@ function Tweet() {
           }
           <p
             onClick={() => { setPage(page + 1) }}
-            className="text-white">load more ....</p>
+            className="text-white cursor-pointer">load more ....</p>
         </div>
         <div className='hidden sm:block sm:w-2/3 md:w-1/4 '>
           {

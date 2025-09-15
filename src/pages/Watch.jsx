@@ -6,7 +6,6 @@ import { AuthContext } from "../context/AuthContext";
 import {Notification} from "../components/Notification";
 import SubscribeButton from '../components/SubscribeButton';
 import CommentBox from "../components/CommentBox";
-// import CommentSection from "../components/CommentSection"; // Make later
 
 export default function Watch() {
   const { user } = useContext(AuthContext);
@@ -26,7 +25,6 @@ export default function Watch() {
     fetchVideoById(id)
     .then(res => {
       setVideo(res.data);
-      // console.log("Fetched video:", res.data); 
       setLikes((res.data.likes || 0));
       
       setLoading(false);
@@ -41,14 +39,13 @@ export default function Watch() {
     .catch(err => console.log(err));
   }, [id]);
   
-  // console.log("video : ",video)
 
-  const handelTimeUpdta = async (currentTime) => {
-    if (!watched && (currentTime >= video.duration - 2 || currentTime >= minWatchTimeRiq)) {
-      setWatched(true);
+  const handelTimeUpdta = async (playedSeconds) => {
+    if (!watched && (playedSeconds >= (video.duration - 2) || playedSeconds >= minWatchTimeRiq)) {
+       setWatched(true);
       if (user !== null) {
-        await incrimentViews(video._id, user._id);
-        await addVideoToWatchHistory(video._id, user._id);
+        const res = await incrimentViews(video._id, user._id);
+        const history = await addVideoToWatchHistory(video._id, user._id);
       }
     }
   };
@@ -91,8 +88,6 @@ export default function Watch() {
   async function toggleLike(e) {
 
     try {
-      // const storedUser = JSON.parse(localStorage.getItem("user"));
-      // const token = storedUser?.accessToken;
       if(!user) {
         setMassage("login to like video");
         return;
@@ -113,8 +108,6 @@ export default function Watch() {
       setTimeout(() => {
         setMassage("");
       }, 5000)
-      // const res = await refreshToken(user.refreshToken);
-      // console.log(res)
     }
   }
 
@@ -148,7 +141,7 @@ export default function Watch() {
             src={video.videoFile}
             controls={true}
             autoPlay={false}
-            onProgress={({ playedSeconds }) => handelTimeUpdta(playedSeconds)}
+            onTimeUpdate={(event) => handelTimeUpdta(event.target.currentTime)}
             // autoplay nahi
             width="auto"
             height="90%"
@@ -185,8 +178,10 @@ export default function Watch() {
                 Comments ({comments?.length})
               </h2>
 
-               Comment Form onSubmit={(e) => handleCommentSubmit(e)}
-              <form  className="mb-4 flex gap-2">
+               
+              <form onSubmit={(e) => handleCommentSubmit(e)} 
+              
+              className="mb-4 flex gap-2">
                 <input
                   type="text"
                   placeholder="Add a comment..."

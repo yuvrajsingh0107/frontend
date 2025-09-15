@@ -44,8 +44,8 @@ function VideoCard({video}) {
                     <img
                       // onClick={ navigateToChannel}
                       id='avatar'
-                      src={video.ownerInfo[0].avatar}
-                      alt={`${video.ownerInfo[0].userName} avatar`}
+                      src={video.ownerInfo[0]?.avatar}
+                      alt={`${video.ownerInfo[0]?.userName} avatar`}
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
@@ -58,7 +58,7 @@ function VideoCard({video}) {
                     </h3>
 
                     <div className="flex items-center text-xs text-gray-500 mt-1 gap-2 truncate">
-                      <span className="truncate">{video.ownerInfo[0].userName}</span>
+                      <span className="truncate">{video.ownerInfo[0]?.userName}</span>
                       <span className="hidden sm:inline">•</span>
                       <span className="hidden sm:inline">{video.views ?? "0"} views</span>
                       <span className="hidden sm:inline">•</span>
