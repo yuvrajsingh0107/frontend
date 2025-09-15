@@ -1,14 +1,15 @@
-import React from 'react'
-import {motion} from 'framer-motion';
-
+import { useNavigate } from "react-router-dom";
 function VideoCard({video}) {
+  const navigate = useNavigate()
   // console.log(video)
   const onClick = (e) => {
     
     if(e.target.id == "avatar" || e.target.id == "avatarDiv" || e.target.id == "avatarDivParent"){
-      window.location.href = `/channel/${video.ownerInfo[0]._id}`;
+      navigate(`/channel/${video.ownerInfo[0]._id}`)
+      // window.location.href = `/channel/${video.ownerInfo[0]._id}`;
     }else{
-      window.location.href = `/watch/${video._id}`;
+      navigate(`/watch/${video._id}`)
+      // window.location.href = `/watch/${video._id}`;
     }
   }
   return (

@@ -84,8 +84,6 @@ async function fetchData(){
     };
   }, [loaderRef, loading]);
 
-  // if (!sideBar && loading) return <div>Loading...</div>;
-  // if (!sideBar && !videos.length) return <div>No videos found</div>;
   return (
     
     

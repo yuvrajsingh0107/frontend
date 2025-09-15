@@ -1,10 +1,12 @@
 import React from 'react'
 import {motion} from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 function VideoCard({video , _id}) {
-
+  const navigate = useNavigate();
   const onClick = (e) => {
-    window.location.href = `/watch/${video._id}`;
+    navigate(`/watch/${video._id}`)
+    // window.location.href = `/watch/${video._id}`;
   }
   return (
     <div className='cursor-pointer'>

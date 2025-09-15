@@ -3,6 +3,7 @@ import like from '../assets/like.svg';
 import likedSVG from '../assets/liked.svg';
 import { AuthContext } from '../context/AuthContext';
 import { likeTweet } from '../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -13,6 +14,7 @@ function TweetCard({tweet}) {
   const [likes, setLikes] = useState(tweet.likes);
 
   const [liked,setLiked] = useState(tweet.isliked)
+  const navigate = useNavigate();
   useEffect(() => {
     setTimeout(() => {
       if(error) setError("");
@@ -41,7 +43,8 @@ function TweetCard({tweet}) {
     }
   }
   const navigateToChannel = () => {
-    window.location.href = `/channel/${tweet.owner._id}`;
+    navigate(`/channel/${tweet.owner._id}`)
+    // window.location.href = `/channel/${tweet.owner._id}`;
   }
 
   return (
